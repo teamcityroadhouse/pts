@@ -6,9 +6,8 @@ RUN export url='http://phoronix-test-suite.com/releases/' && \
     export version='9.0.1' && \
     export sha256sum='a117a4350774e67989d90bf0b5e82a8072652f8caa60a62c3e5f' && \
     apt-get update -qq && \
-    apt-get install -qqy --no-install-recommends ca-certificates curl \
-                build-essential unzip mesa-utils php-cli php-xml procps \
-                flex &&\
+    apt-get install -qqy ca-certificates curl unzip php-cli php-xml procps &&\
+    apt-get install -qqy build-essential autoconf bc bison libssl-dev mesa-utils unzip apt-file flex &&\
     echo "downloading phoronix-test-suite-${version}.tar.gz ..." && \
     curl -LSs "${url}phoronix-test-suite-${version}.tar.gz" -o pts.tgz && \
     sha256sum pts.tgz | grep -q "$sha256sum" || \

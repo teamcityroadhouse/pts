@@ -1,16 +1,13 @@
 FROM ubuntu:18.04
-RUN apt-get update
+ENV DEBIAN_FRONTEND noninteractive
 
 # Install PTS
-RUN export DEBIAN_FRONTEND='noninteractive' && \
-    export url='http://phoronix-test-suite.com/releases/' && \
+RUN export url='http://phoronix-test-suite.com/releases/' && \
     export version='9.0.1' && \
     export sha256sum='a117a4350774e67989d90bf0b5e82a8072652f8caa60a62c3e5f' && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends ca-certificates curl \
-                build-essential unzip mesa-utils php7.0-cli php7.0-gd \
-                php7.0-json php7.0-xml procps \
-                $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
+                build-essential unzip mesa-utils php-cli php-xml procps &&\
     echo "downloading phoronix-test-suite-${version}.tar.gz ..." && \
     curl -LSs "${url}phoronix-test-suite-${version}.tar.gz" -o pts.tgz && \
     sha256sum pts.tgz | grep -q "$sha256sum" || \
@@ -18,7 +15,5 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     tar xf pts.tgz && \
     (cd phoronix-test-suite && ./install-sh) && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* phoronix-test-suite pts.tgz
- 
-RUN phoronix-test-suite install pts/build-linux-kernel
-CMD phoronix-test-suite benchmark pts/build-linux-kernel
+    rm -rf /var/lib/apt/lists/* /tmp/* phoronix-test-suite pts.tgz && \
+    rm /usr/share/phoronix-test-suite/pts-core/objects/pts_openbenchmarking_upload.php

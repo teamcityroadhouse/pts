@@ -8,6 +8,7 @@ RUN export url='http://phoronix-test-suite.com/releases/' && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends ca-certificates curl \
                 build-essential unzip mesa-utils php-cli php-xml procps &&\
+                flex &&\
     echo "downloading phoronix-test-suite-${version}.tar.gz ..." && \
     curl -LSs "${url}phoronix-test-suite-${version}.tar.gz" -o pts.tgz && \
     sha256sum pts.tgz | grep -q "$sha256sum" || \
@@ -17,3 +18,11 @@ RUN export url='http://phoronix-test-suite.com/releases/' && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* phoronix-test-suite pts.tgz && \
     rm /usr/share/phoronix-test-suite/pts-core/objects/pts_openbenchmarking_upload.php
+
+# Batch mode created with batch-setup
+COPY phoronix-test-suite.xml /etc/
+
+# Install benchmarks
+RUN phoronix-test-suite batch-install pts/build-linux-kernel
+
+CMD phoronix-test-suite batch-benchmark pts/build-linux-kernel

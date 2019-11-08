@@ -7,7 +7,7 @@ RUN export url='http://phoronix-test-suite.com/releases/' && \
     export sha256sum='a117a4350774e67989d90bf0b5e82a8072652f8caa60a62c3e5f' && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends ca-certificates curl \
-                build-essential unzip mesa-utils php-cli php-xml procps &&\
+                build-essential unzip mesa-utils php-cli php-xml procps \
                 flex &&\
     echo "downloading phoronix-test-suite-${version}.tar.gz ..." && \
     curl -LSs "${url}phoronix-test-suite-${version}.tar.gz" -o pts.tgz && \
